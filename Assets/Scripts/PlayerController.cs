@@ -7,12 +7,15 @@ public class PlayerController : MonoBehaviour
     public float spawnYPosition = 1f;
     private bool isGrounded; // Check if player is on the ground
     private Rigidbody2D rb;
+    private GameManager gameManager;
 
     private void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-        Vector2 spawnPosition = new Vector2(spawnXPosition, spawnYPosition);
+        Vector2 spawnPosition = new(spawnXPosition, spawnYPosition);
         transform.position = spawnPosition;
+
+        gameManager = FindAnyObjectByType<GameManager>();
     }
 
     private void Update()
@@ -24,6 +27,12 @@ public class PlayerController : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
+
+        if(collision.collider.CompareTag("Obstacle"))
+        {
+            gameManager.GameOver();
+        }
+
         if (collision.collider.CompareTag("Ground"))
         {
             isGrounded = true;
